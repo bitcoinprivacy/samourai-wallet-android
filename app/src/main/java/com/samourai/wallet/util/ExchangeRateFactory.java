@@ -300,10 +300,8 @@ public class ExchangeRateFactory	{
         System.out.println(currency);
         try {
             JSONObject jsonObject = new JSONObject(strDataKraken);
-            System.out.println("Leck mich"+ strDataKraken);
             if (jsonObject != null)	{
                 JSONObject jsonCurr = jsonObject.getJSONObject("result").getJSONObject("XXBTZEUR");
-                System.out.println(jsonCurr.toString(2));
                 if (jsonCurr != null)	{
                     double avg_price = 0.0;
                     if(jsonCurr.has("p"))	{

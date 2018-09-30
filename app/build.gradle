@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
     useLibrary 'org.apache.http.legacy'
     flavorDimensions "versionCode"
     defaultConfig {
@@ -40,16 +40,16 @@ android {
     }
     productFlavors {
         production {
-            applicationId 'com.samourai.wallet'
+            applicationId 'net.bitcoinprivacy.samourai.wallet'
             minSdkVersion 21
             targetSdkVersion 26
             versionCode 121
             versionName "0.98.89"
-            resValue "string", "app_name", "Samourai"
+            resValue "string", "app_name", "Samourai+"
             resValue "string", "version_name", "0.98.89"
         }
         staging {
-            applicationId 'com.samourai.wallet.staging'
+            applicationId 'net.bitcoinprivacy.samourai.wallet.staging'
             minSdkVersion 21
             targetSdkVersion 26
             versionCode 121
