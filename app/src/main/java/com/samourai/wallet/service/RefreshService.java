@@ -7,6 +7,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,7 +27,10 @@ import com.samourai.wallet.segwit.BIP84Util;
 import com.samourai.wallet.util.AddressFactory;
 import com.samourai.wallet.util.AppUtil;
 import com.samourai.wallet.util.CharSequenceX;
+import com.samourai.wallet.util.ConnectivityStatus;
+import com.samourai.wallet.util.ExchangeRateFactory;
 import com.samourai.wallet.util.PrefsUtil;
+import com.samourai.wallet.util.WebUtil;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.bitcoinj.core.AddressFormatException;
@@ -199,6 +203,8 @@ public class RefreshService extends IntentService {
 
         Intent _intent = new Intent("com.samourai.wallet.BalanceFragment.DISPLAY");
         LocalBroadcastManager.getInstance(RefreshService.this).sendBroadcast(_intent);
+
+        ExchangeRateFactory.getInstance(RefreshService.this).exchangeRateThread();
 
     }
 
