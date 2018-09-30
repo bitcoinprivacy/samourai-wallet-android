@@ -53,6 +53,7 @@ import com.samourai.wallet.bip47.rpc.PaymentAddress;
 import com.samourai.wallet.bip47.rpc.PaymentCode;
 import com.samourai.wallet.hd.HD_WalletFactory;
 import com.samourai.wallet.segwit.BIP49Util;
+import com.samourai.wallet.segwit.SegwitAddress;
 import com.samourai.wallet.segwit.bech32.Bech32Util;
 import com.samourai.wallet.send.FeeUtil;
 import com.samourai.wallet.send.MyTransactionOutPoint;
@@ -762,7 +763,14 @@ public class BatchSendActivity extends Activity {
                     PaymentCode _pcode = new PaymentCode(pcode);
                     PaymentAddress paymentAddress = BIP47Util.getInstance(BatchSendActivity.this).getSendAddress(_pcode, BIP47Meta.getInstance().getOutgoingIdx(pcode));
 
-                    strDestinationBTCAddress = paymentAddress.getSendECKey().toAddress(SamouraiWallet.getInstance().getCurrentNetworkParams()).toString();
+                    if(BIP47Meta.getInstance().getSegwit(pcode))    {
+                        SegwitAddress segwitAddress = new SegwitAddress(paymentAddress.getSendECKey(), SamouraiWallet.getInstance().getCurrentNetworkParams());
+                        strDestinationBTCAddress = segwitAddress.getBech32AsString();
+                    }
+                    else    {
+                        strDestinationBTCAddress = paymentAddress.getSendECKey().toAddress(SamouraiWallet.getInstance().getCurrentNetworkParams()).toString();
+                    }
+
                     strPCode = _pcode.toString();
                     edAddress.setText(BIP47Meta.getInstance().getDisplayLabel(strPCode));
                     edAddress.setEnabled(false);
@@ -870,7 +878,13 @@ public class BatchSendActivity extends Activity {
             Log.d("BatchSendActivity", "output:" + _data.addr);
             Log.d("BatchSendActivity", "output:" + _data.pcode);
             amount += _data.amount;
-            receivers.put(_data.addr, BigInteger.valueOf(_data.amount));
+            if(receivers.containsKey(_data.addr))    {
+                BigInteger _amount = receivers.get(_data.addr);
+                receivers.put(_data.addr, _amount.add(BigInteger.valueOf(_data.amount)));
+            }
+            else    {
+                receivers.put(_data.addr, BigInteger.valueOf(_data.amount));
+            }
         }
         Log.d("BatchSendActivity", "amount:" + amount);
 
